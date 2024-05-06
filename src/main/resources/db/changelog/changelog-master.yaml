@@ -1,0 +1,70 @@
+databaseChangeLog:
+  - logicalFilePath: no-path
+  - changeSet:
+      id: DEV-1
+      author: Madina
+      changes:
+        - createTable:
+            tableName: user_account
+            columns:
+              - column:
+                  name: id
+                  type: serial
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: DEV-2
+      author: Madina
+      changes:
+        - createSequence:
+            sequenceName: devops_new_seq_id
+            dataType: int
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: currency
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  defaultValueSequenceNext: devops_new_seq_id
+              - column:
+                  name: bank_id
+                  type: bigint
+                  constraints:
+                    unique: true
+              - column:
+                  name: code
+                  type: bigint
+              - column:
+                  name: ccy
+                  type: varchar(100)
+              - column:
+                  name: ccy_nm_uz
+                  type: varchar(100)
+              - column:
+                  name: rate
+                  type: double precision
+              - column:
+                  name: date
+                  type: date

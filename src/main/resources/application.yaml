@@ -1,0 +1,9 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/${DB_NAME:currency_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:2006}
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.yaml
+    enabled: true
