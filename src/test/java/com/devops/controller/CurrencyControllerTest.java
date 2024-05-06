@@ -30,7 +30,6 @@ public class CurrencyControllerTest {
     @Autowired
     private WebTestClient webTestClient;
 
-
     @Test
     public void updateCurrencyTest() {
         when(currencyService.updateData(anyLong())).thenReturn(Mono.just("Currency database updated ✅"));
