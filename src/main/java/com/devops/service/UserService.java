@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.naming.AuthenticationException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class UserService {
                 .role(UserRole.USER_ROLE.name())
                 .build();
 
-        return userRepository.findByEmail(signUpDto.getEmail())
+        return userRepository.findFirstByEmail(signUpDto.getEmail())
                 .flatMap(user -> Mono.error(new DataAlreadyExistsException("User already exists with email: " + signUpDto.getEmail())))
                 .then(userRepository.save(newUser))
                 .map(savedUser -> new UserResponseDto(
@@ -40,7 +39,7 @@ public class UserService {
     }
 
     public Mono<UserResponseDto> signIn(String email, String password) {
-        return userRepository.findByEmail(email)
+        return userRepository.findFirstByEmail(email)
                 .switchIfEmpty(Mono.error(new DataNotFoundException("User not found with email: " + email)))
                 .flatMap(user -> {
                     if(user.getPassword().equals(password)) {

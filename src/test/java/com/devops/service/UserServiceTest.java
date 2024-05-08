@@ -7,11 +7,14 @@ import com.devops.exceptions.DataNotFoundException;
 import com.devops.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -20,28 +23,26 @@ import javax.naming.AuthenticationException;
 import static com.devops.entity.UserRole.USER_ROLE;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class UserServiceTest {
 
-    @Mock
+    @SpyBean
     private UserRepository userRepository;
 
-    @InjectMocks
+    @Autowired
     private UserService userService;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
 
-
     @Test
     void signUp_NewUser_Success() {
         SignUpDto signUpDto = new SignUpDto("test@example.com","test_user","password");
-
-        when(userRepository.findByEmail(signUpDto.getEmail())).thenReturn(Mono.empty());
-        when(userRepository.save(any(User.class))).thenAnswer(user -> Mono.just(user.getArgument(0)));
-
+        when(userRepository.findFirstByEmail(signUpDto.getEmail())).thenReturn(Mono.empty());
         Mono<UserResponseDto> result = userService.signUp(signUpDto);
 
         StepVerifier.create(result)
@@ -63,25 +64,23 @@ public class UserServiceTest {
         user.setPassword("password");
         user.setRole(USER_ROLE.name());
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Mono.just(user));
+        when(userRepository.findFirstByEmail("test@example.com")).thenReturn(Mono.just(user));
 
         Mono<UserResponseDto> result = userService.signIn("test@example.com", "password");
 
         StepVerifier.create(result)
-                .expectNextMatches(response -> {
-                    return response.getId().equals(user.getId())
-                            && response.getUsername().equals(user.getUsername())
-                            && response.getEmail().equals(user.getEmail())
-                            && response.getPassword().equals(user.getPassword()) // Note: You may want to reconsider returning password in the response
-                            && response.getRole().equals(user.getRole());
-                })
+                .expectNextMatches(response -> response.getId().equals(user.getId())
+                        && response.getUsername().equals(user.getUsername())
+                        && response.getEmail().equals(user.getEmail())
+                        && response.getPassword().equals(user.getPassword()) // Note: You may want to reconsider returning password in the response
+                        && response.getRole().equals(user.getRole()))
                 .verifyComplete();
 
     }
 
     @Test
     void signIn_UserNotFound() {
-        when(userRepository.findByEmail(anyString())).thenReturn(Mono.empty());
+        when(userRepository.findFirstByEmail(anyString())).thenReturn(Mono.empty());
 
         Mono<UserResponseDto> result = userService.signIn("test@example.com", "password");
 
@@ -96,7 +95,7 @@ public class UserServiceTest {
         user.setEmail("test@example.com");
         user.setPassword("password123");
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Mono.just(user));
+        when(userRepository.findFirstByEmail("test@example.com")).thenReturn(Mono.just(user));
 
         Mono<UserResponseDto> result = userService.signIn("test@example.com", "password");
 

@@ -1,6 +1,7 @@
 package com.devops.entity;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -19,5 +20,4 @@ public class User  {
     private String password;
     private String email;
     private String role;
-
 }

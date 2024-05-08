@@ -10,8 +10,7 @@ TRUNCATE TABLE user_account;
 
 
 CREATE TABLE IF NOT EXISTS currency (
-    id SERIAL PRIMARY KEY,
-    bank_id BIGINT UNIQUE ,
+    id BIGINT PRIMARY KEY,
     code BIGINT,
     ccy VARCHAR(100),
     ccy_nm_uz VARCHAR(100),

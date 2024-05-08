@@ -6,12 +6,16 @@ import com.devops.exceptions.DataNotFoundException;
 import com.devops.repository.CurrencyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -25,20 +29,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(MockitoJUnitRunner.class)
-public class CurrencyServiceTest {
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+public class CurrencyServiceMockTest {
 
-    @Mock
+    @MockBean
     private CurrencyRepository currencyRepository;
 
-    @InjectMocks
+    @Autowired
     private CurrencyService currencyService;
+
     Currency currency = new Currency();
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         currency.setId(1L);
-        currency.setBankId(123L);
+        currency.setId(123L);
         currency.setCode(123);
         currency.setCcy("USD");
         currency.setCcyNmUz("US Dollar");

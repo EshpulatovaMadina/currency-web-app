@@ -3,7 +3,9 @@ spring:
     url: r2dbc:postgresql://localhost:5432/${DB_NAME:currency_db}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:2006}
-
   liquibase:
     change-log: classpath:db/changelog/changelog-master.yaml
     enabled: true
+#    url: jdbc:postgresql://localhost:5432/${DB_NAME:currency_db}
+#    user: postgres
+#    password: 2006

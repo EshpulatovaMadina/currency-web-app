@@ -11,6 +11,12 @@ java {
     sourceCompatibility = '17'
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2020.0.3'
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -18,16 +24,20 @@ repositories {
 dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
     implementation 'org.springframework.data:spring-data-r2dbc'
     implementation group: 'org.postgresql', name: 'r2dbc-postgresql', version: '1.0.5.RELEASE'
+    implementation 'org.postgresql:postgresql:42.7.3'
     implementation 'org.liquibase:liquibase-core'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     compileOnly 'org.projectlombok:lombok'
-    testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation group: 'io.github.openfeign', name: 'feign-jackson', version: '9.3.1'
+    implementation 'io.r2dbc:r2dbc-h2:1.0.0.RELEASE'
+    implementation 'com.h2database:h2'
 }
 
 tasks.named('test') {

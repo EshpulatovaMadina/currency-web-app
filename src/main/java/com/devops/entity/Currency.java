@@ -11,6 +11,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Builder
@@ -20,18 +21,22 @@ import java.time.LocalDate;
 @Setter
 @Table("currency")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Currency {
-    @Id
+public class Currency implements Serializable {
+
     private Long id;
-    private Long bankId;
+
     @JsonProperty("Code")
     private Integer code;
+
     @JsonProperty("Ccy")
     private String ccy;
+
     @JsonProperty("CcyNm_UZ")
     private String ccyNmUz;
+
     @JsonProperty("Rate")
     private Double rate;
+
     @JsonProperty("Date")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
