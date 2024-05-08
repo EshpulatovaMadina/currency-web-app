@@ -6,6 +6,6 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/changelog-master.yaml
     enabled: true
-#    url: jdbc:postgresql://localhost:5432/${DB_NAME:currency_db}
-#    user: postgres
-#    password: 2006
+    url: jdbc:postgresql://localhost:5432/${DB_NAME:currency_db}
+    user: postgres
+    password: 2006
